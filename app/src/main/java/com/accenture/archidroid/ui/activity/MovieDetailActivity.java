@@ -6,9 +6,10 @@ import android.widget.TextView;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.model.event.MovieDetailEvent;
+import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMovieDetailActivityComponent;
 import com.accenture.archidroid.logic.activity.MovieDetailActivityComponent;
+import com.accenture.archidroid.model.event.MovieDetailEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -21,8 +22,6 @@ import butterknife.ButterKnife;
 public class MovieDetailActivity extends BaseActivity {
 
     private final String TAG = getClass().getSimpleName();
-
-    private MovieDetailActivityComponent activityComponent;
 
     @BindView(R.id.title)
     TextView title;
@@ -38,16 +37,21 @@ public class MovieDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityComponent = DaggerMovieDetailActivityComponent.builder()
-                .restComponent(App.restComponent())
-                .build();
-        activityComponent.inject(this);
-
         setContentView(R.layout.activity_moviedetail);
         ButterKnife.bind(this);
 
         dataKey = getIntent().getStringExtra("imdbId");
 
+    }
+
+    @Override
+    protected ActivityComponent init() {
+        MovieDetailActivityComponent activityComponent = DaggerMovieDetailActivityComponent.builder()
+                .restComponent(App.restComponent())
+                .build();
+        activityComponent.inject(this);
+
+        return activityComponent;
     }
 
     @Override

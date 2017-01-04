@@ -8,10 +8,11 @@ import android.util.Log;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.model.event.MoviesEvent;
+import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMoviesActivityComponent;
 import com.accenture.archidroid.logic.activity.MoviesActivityComponent;
 import com.accenture.archidroid.model.data.Movie;
+import com.accenture.archidroid.model.event.MoviesEvent;
 import com.accenture.archidroid.ui.adapter.MoviesAdapter;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
@@ -29,8 +30,6 @@ public class MoviesActivity extends BaseActivity {
 
     private final String TAG = getClass().getSimpleName();
 
-    private MoviesActivityComponent activityComponent;
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -44,11 +43,6 @@ public class MoviesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityComponent = DaggerMoviesActivityComponent.builder()
-                .restComponent(App.restComponent())
-                .build();
-        activityComponent.inject(this);
-
         setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
 
@@ -74,9 +68,13 @@ public class MoviesActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        activityComponent = null;
-        super.onDestroy();
+    protected ActivityComponent init() {
+        MoviesActivityComponent activityComponent = DaggerMoviesActivityComponent.builder()
+                .restComponent(App.restComponent())
+                .build();
+        activityComponent.inject(this);
+
+        return activityComponent;
     }
 
     @Override

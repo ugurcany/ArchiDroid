@@ -18,11 +18,9 @@ import dagger.Provides;
  */
 @ActivityScope
 @Component(dependencies={RestComponent.class}, modules={MovieDetailActivityComponent.ActivityModule.class})
-public interface MovieDetailActivityComponent {
+public interface MovieDetailActivityComponent extends ActivityComponent {
 
     void inject(MovieDetailActivity activity);
-
-    Executor executor();
 
     @Module
     class ActivityModule {
