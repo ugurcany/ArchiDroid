@@ -32,7 +32,7 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -69,11 +69,10 @@ dependencies {
     //EVENT BUS
     compile 'org.greenrobot:eventbus:3.0.0'
 
-    //RESERVOIR
-    compile 'com.anupcowkur:reservoir:3.1.0'
-
     //BUTTER KNIFE
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
+    //RECYCLER VIEW ENHANCED
+    compile 'com.nikhilpanju.recyclerviewenhanced:recyclerviewenhanced:1.1.0'
 }

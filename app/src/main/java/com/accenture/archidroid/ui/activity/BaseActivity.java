@@ -1,4 +1,4 @@
-package com.accenture.archidroid.ui;
+package com.accenture.archidroid.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 

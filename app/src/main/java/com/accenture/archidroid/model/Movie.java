@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class Movie implements Serializable {
+public class Movie extends BaseModel implements Serializable {
 
     @SerializedName("imdbID")
     public String imdbId;
@@ -17,6 +17,9 @@ public class Movie implements Serializable {
 
     @SerializedName("Year")
     public String year;
+
+    @SerializedName("Plot")
+    public String plot;
 
     @SerializedName("Poster")
     public String posterUrl;
@@ -28,8 +31,8 @@ public class Movie implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Movie) {
-            return ((Movie) obj).imdbId.equals(this.imdbId);
+        if (obj instanceof Movie && ((Movie)obj).imdbId != null && this.imdbId != null) {
+            return ((Movie)obj).imdbId.equals(this.imdbId);
         }
         return false;
     }
