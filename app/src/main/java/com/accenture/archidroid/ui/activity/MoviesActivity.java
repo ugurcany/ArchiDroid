@@ -8,10 +8,10 @@ import android.util.Log;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.event.MoviesEvent;
-import com.accenture.archidroid.logic.executor.Executor;
-import com.accenture.archidroid.logic.executor.ExecutorModule;
-import com.accenture.archidroid.model.Movie;
+import com.accenture.archidroid.model.event.MoviesEvent;
+import com.accenture.archidroid.logic.activity.DaggerMoviesActivityComponent;
+import com.accenture.archidroid.logic.activity.MoviesActivityComponent;
+import com.accenture.archidroid.model.data.Movie;
 import com.accenture.archidroid.ui.adapter.MoviesAdapter;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
@@ -19,22 +19,17 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class HomeActivity extends BaseActivity {
+public class MoviesActivity extends BaseActivity {
 
     private final String TAG = getClass().getSimpleName();
 
-    @Inject
-    @Named(ExecutorModule.MOVIES)
-    Executor executor;
+    private MoviesActivityComponent activityComponent;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -49,8 +44,12 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.injector().inject(this);
-        setContentView(R.layout.activity_home);
+        activityComponent = DaggerMoviesActivityComponent.builder()
+                .restComponent(App.restComponent())
+                .build();
+        activityComponent.inject(this);
+
+        setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
 
         movieList = new ArrayList<>();
@@ -63,7 +62,7 @@ public class HomeActivity extends BaseActivity {
         recyclerTouchListener.setClickable(new RecyclerTouchListener.OnRowClickListener() {
             @Override
             public void onRowClicked(int position) {
-                Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MoviesActivity.this, MovieDetailActivity.class);
                 intent.putExtra("imdbId", movieList.get(position).imdbId);
                 startActivity(intent);
             }
@@ -72,6 +71,12 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        activityComponent = null;
+        super.onDestroy();
     }
 
     @Override
@@ -88,7 +93,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        executor.execute(dataKey, dataKey, "json");
+        activityComponent.executor().execute(dataKey, dataKey, "json");
     }
 
     @Subscribe

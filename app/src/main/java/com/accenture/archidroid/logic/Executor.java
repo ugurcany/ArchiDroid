@@ -1,9 +1,9 @@
-package com.accenture.archidroid.logic.executor;
+package com.accenture.archidroid.logic;
 
 import android.util.Log;
 
-import com.accenture.archidroid.logic.data.DataHandler;
-import com.accenture.archidroid.model.BaseModel;
+import com.accenture.archidroid.logic.rest.RestApi;
+import com.accenture.archidroid.model.data.BaseData;
 
 import java.lang.reflect.Method;
 
@@ -14,7 +14,7 @@ import retrofit2.Response;
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class Executor {
+public class Executor<D extends BaseData> {
 
     private final String TAG = getClass().getSimpleName();
 
@@ -38,7 +38,7 @@ public class Executor {
         }
     }
 
-    public <D extends BaseModel> void execute(final String key, final String... params){
+    public void execute(final String key, final String... params){
         //POST DATA IF ALREADY EXISTS
         if(dataHandler.hasData(key)){
             dataHandler.postData(true);

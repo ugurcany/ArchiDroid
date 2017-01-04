@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.model.Movie;
+import com.accenture.archidroid.model.data.Movie;
 
 import java.util.List;
 

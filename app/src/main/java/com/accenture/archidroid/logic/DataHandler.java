@@ -1,14 +1,14 @@
-package com.accenture.archidroid.logic.data;
+package com.accenture.archidroid.logic;
 
-import com.accenture.archidroid.event.BaseEvent;
-import com.accenture.archidroid.model.BaseModel;
+import com.accenture.archidroid.model.event.BaseEvent;
+import com.accenture.archidroid.model.data.BaseData;
 
 import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class DataHandler<D extends BaseModel, E extends BaseEvent<D>> {
+public class DataHandler<D extends BaseData, E extends BaseEvent<D>> {
 
     private String key = null;
 

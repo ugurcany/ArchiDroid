@@ -1,4 +1,4 @@
-package com.accenture.archidroid.model;
+package com.accenture.archidroid.model.data;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class Movie extends BaseModel implements Serializable {
+public class Movie extends BaseData implements Serializable {
 
     @SerializedName("imdbID")
     public String imdbId;

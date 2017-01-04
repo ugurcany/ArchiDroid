@@ -6,14 +6,11 @@ import android.widget.TextView;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.event.MovieDetailEvent;
-import com.accenture.archidroid.logic.executor.Executor;
-import com.accenture.archidroid.logic.executor.ExecutorModule;
+import com.accenture.archidroid.model.event.MovieDetailEvent;
+import com.accenture.archidroid.logic.activity.DaggerMovieDetailActivityComponent;
+import com.accenture.archidroid.logic.activity.MovieDetailActivityComponent;
 
 import org.greenrobot.eventbus.Subscribe;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,13 +18,11 @@ import butterknife.ButterKnife;
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class DetailActivity extends BaseActivity {
+public class MovieDetailActivity extends BaseActivity {
 
     private final String TAG = getClass().getSimpleName();
 
-    @Inject
-    @Named(ExecutorModule.MOVIE_DETAIL)
-    Executor executor;
+    private MovieDetailActivityComponent activityComponent;
 
     @BindView(R.id.title)
     TextView title;
@@ -43,8 +38,12 @@ public class DetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.injector().inject(this);
-        setContentView(R.layout.activity_detail);
+        activityComponent = DaggerMovieDetailActivityComponent.builder()
+                .restComponent(App.restComponent())
+                .build();
+        activityComponent.inject(this);
+
+        setContentView(R.layout.activity_moviedetail);
         ButterKnife.bind(this);
 
         dataKey = getIntent().getStringExtra("imdbId");
@@ -53,7 +52,7 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        executor.execute(dataKey, dataKey, "short", "json");
+        activityComponent.executor().execute(dataKey, dataKey, "short", "json");
     }
 
     @Subscribe

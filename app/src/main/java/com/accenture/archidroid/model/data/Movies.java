@@ -1,4 +1,4 @@
-package com.accenture.archidroid.model;
+package com.accenture.archidroid.model.data;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by ugurcan.yildirim on 26.12.2016.
  */
-public class Movies extends BaseModel implements Serializable {
+public class Movies extends BaseData implements Serializable {
 
     @SerializedName("Search")
     public ArrayList<Movie> movieList;

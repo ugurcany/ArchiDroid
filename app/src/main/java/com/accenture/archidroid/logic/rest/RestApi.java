@@ -1,7 +1,7 @@
-package com.accenture.archidroid.logic.executor;
+package com.accenture.archidroid.logic.rest;
 
-import com.accenture.archidroid.model.Movie;
-import com.accenture.archidroid.model.Movies;
+import com.accenture.archidroid.model.data.Movie;
+import com.accenture.archidroid.model.data.Movies;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
