@@ -1,2 +1,2 @@
 # ArchiDroid
-An easy-to-implement architecture for Android apps that consume RESTful service
+A clean & easy-to-implement architecture for Android apps that consume RESTful service
