@@ -4,19 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
 import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMoviesActivityComponent;
 import com.accenture.archidroid.logic.activity.MoviesActivityComponent;
+import com.accenture.archidroid.model.data.BaseData;
 import com.accenture.archidroid.model.data.Movie;
-import com.accenture.archidroid.model.event.MoviesEvent;
+import com.accenture.archidroid.model.data.Movies;
 import com.accenture.archidroid.ui.adapter.MoviesAdapter;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
-
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -28,8 +26,6 @@ import butterknife.ButterKnife;
  */
 public class MoviesActivity extends BaseActivity {
 
-    private final String TAG = getClass().getSimpleName();
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -38,13 +34,13 @@ public class MoviesActivity extends BaseActivity {
     private ArrayList<Movie> movieList;
     private MoviesAdapter moviesAdapter;
 
-    private String dataKey = "lord";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
+
+        dataKey = "lord";
 
         movieList = new ArrayList<>();
         moviesAdapter = new MoviesAdapter(movieList);
@@ -94,20 +90,16 @@ public class MoviesActivity extends BaseActivity {
         activityComponent.executor().execute(dataKey, dataKey, "json");
     }
 
-    @Subscribe
-    public void getMoviesResponse(MoviesEvent event){
-        if(event.success) {
-            //RESPONSE BELONGS TO OUR SEARCH KEY & IS TRUE
-            if (dataKey.equals(event.key) && Boolean.parseBoolean(event.data.response)) {
-                movieList.clear();
-                for (Movie movie : event.data.movieList) {
-                    movieList.add(movie);
-                }
-                moviesAdapter.notifyDataSetChanged();
+    @Override
+    public <D extends BaseData> void onDataArrived(D data){
+        Movies movies = (Movies) data;
+        //RESPONSE IS TRUE
+        if (Boolean.parseBoolean(movies.response)) {
+            movieList.clear();
+            for (Movie movie : movies.movieList) {
+                movieList.add(movie);
             }
-        }
-        else{
-            Log.d(TAG, "Err!");
+            moviesAdapter.notifyDataSetChanged();
         }
     }
 

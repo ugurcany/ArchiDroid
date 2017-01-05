@@ -1,7 +1,6 @@
 package com.accenture.archidroid.ui.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.accenture.archidroid.App;
@@ -9,9 +8,8 @@ import com.accenture.archidroid.R;
 import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMovieDetailActivityComponent;
 import com.accenture.archidroid.logic.activity.MovieDetailActivityComponent;
-import com.accenture.archidroid.model.event.MovieDetailEvent;
-
-import org.greenrobot.eventbus.Subscribe;
+import com.accenture.archidroid.model.data.BaseData;
+import com.accenture.archidroid.model.data.Movie;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,8 +19,6 @@ import butterknife.ButterKnife;
  */
 public class MovieDetailActivity extends BaseActivity {
 
-    private final String TAG = getClass().getSimpleName();
-
     @BindView(R.id.title)
     TextView title;
 
@@ -31,8 +27,6 @@ public class MovieDetailActivity extends BaseActivity {
 
     @BindView(R.id.plot)
     TextView plot;
-
-    private String dataKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +53,14 @@ public class MovieDetailActivity extends BaseActivity {
         activityComponent.executor().execute(dataKey, dataKey, "short", "json");
     }
 
-    @Subscribe
-    public void getMovieDetailsResponse(MovieDetailEvent event){
-        if(event.success) {
-            //RESPONSE BELONGS TO OUR SEARCH KEY & IS TRUE
-            if (dataKey.equals(event.key) && Boolean.parseBoolean(event.data.response)) {
-                title.setText(event.data.title);
-                year.setText(event.data.year);
-                plot.setText(event.data.plot);
-            }
-        }
-        else{
-            Log.d(TAG, "Err!");
+    @Override
+    public <D extends BaseData> void onDataArrived(D data){
+        Movie movie = (Movie) data;
+        //RESPONSE IS TRUE
+        if (Boolean.parseBoolean(movie.response)) {
+            title.setText(movie.title);
+            year.setText(movie.year);
+            plot.setText(movie.plot);
         }
     }
 
