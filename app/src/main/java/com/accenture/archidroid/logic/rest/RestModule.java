@@ -1,7 +1,7 @@
 package com.accenture.archidroid.logic.rest;
 
 import com.accenture.archidroid.BuildConfig;
-import com.accenture.archidroid.logic.scope.AppScope;
+import com.accenture.archidroid.Scope;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +21,7 @@ public class RestModule {
     private final String BASE_URL = "http://www.omdbapi.com/";
 
     @Provides
-    @AppScope
+    @Scope.AppScope
     OkHttpClient providesHttpClient() {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         clientBuilder
@@ -39,7 +39,7 @@ public class RestModule {
     }
 
     @Provides
-    @AppScope
+    @Scope.AppScope
     Retrofit providesRetrofit(OkHttpClient httpClient) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -49,7 +49,7 @@ public class RestModule {
     }
 
     @Provides
-    @AppScope
+    @Scope.AppScope
     RestApi providesRestApi(Retrofit retrofit) {
         return retrofit.create(RestApi.class);
     }

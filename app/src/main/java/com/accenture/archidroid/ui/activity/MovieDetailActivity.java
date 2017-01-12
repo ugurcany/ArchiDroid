@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMovieDetailActivityComponent;
 import com.accenture.archidroid.logic.activity.MovieDetailActivityComponent;
 import com.accenture.archidroid.model.data.BaseData;
@@ -18,6 +17,8 @@ import butterknife.ButterKnife;
  * Created by ugurcan.yildirim on 26.12.2016.
  */
 public class MovieDetailActivity extends BaseActivity {
+
+    private MovieDetailActivityComponent activityComponent;
 
     @BindView(R.id.title)
     TextView title;
@@ -39,18 +40,21 @@ public class MovieDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected ActivityComponent init() {
-        MovieDetailActivityComponent activityComponent = DaggerMovieDetailActivityComponent.builder()
+    protected void init() {
+        activityComponent = DaggerMovieDetailActivityComponent.builder()
                 .restComponent(App.restComponent())
                 .build();
         activityComponent.inject(this);
+    }
 
-        return activityComponent;
+    @Override
+    protected void destroy() {
+        activityComponent = null;
     }
 
     @Override
     public void loadData() {
-        activityComponent.executor().execute(dataKey, dataKey, "short", "json");
+        activityComponent.getMovieDetail().execute(dataKey, dataKey, "short", "json");
     }
 
     @Override

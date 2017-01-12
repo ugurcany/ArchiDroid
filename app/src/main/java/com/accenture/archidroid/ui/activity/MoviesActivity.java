@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.accenture.archidroid.App;
 import com.accenture.archidroid.R;
-import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.logic.activity.DaggerMoviesActivityComponent;
 import com.accenture.archidroid.logic.activity.MoviesActivityComponent;
 import com.accenture.archidroid.model.data.BaseData;
@@ -25,6 +24,8 @@ import butterknife.ButterKnife;
  * Created by ugurcan.yildirim on 26.12.2016.
  */
 public class MoviesActivity extends BaseActivity {
+
+    private MoviesActivityComponent activityComponent;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -64,13 +65,16 @@ public class MoviesActivity extends BaseActivity {
     }
 
     @Override
-    protected ActivityComponent init() {
-        MoviesActivityComponent activityComponent = DaggerMoviesActivityComponent.builder()
+    protected void init() {
+        activityComponent = DaggerMoviesActivityComponent.builder()
                 .restComponent(App.restComponent())
                 .build();
         activityComponent.inject(this);
+    }
 
-        return activityComponent;
+    @Override
+    protected void destroy() {
+        activityComponent = null;
     }
 
     @Override
@@ -87,7 +91,7 @@ public class MoviesActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        activityComponent.executor().execute(dataKey, dataKey, "json");
+        activityComponent.getMovies().execute(dataKey, dataKey, "json");
     }
 
     @Override

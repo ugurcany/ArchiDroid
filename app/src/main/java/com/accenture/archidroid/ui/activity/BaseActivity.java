@@ -3,7 +3,6 @@ package com.accenture.archidroid.ui.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.accenture.archidroid.logic.activity.ActivityComponent;
 import com.accenture.archidroid.model.data.BaseData;
 import com.accenture.archidroid.model.event.BaseEvent;
 
@@ -15,18 +14,17 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected ActivityComponent activityComponent;
     protected String dataKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityComponent = init();
+        init();
     }
 
     @Override
     protected void onDestroy() {
-        activityComponent = null;
+        destroy();
         super.onDestroy();
     }
 
@@ -57,7 +55,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     //TO BE IMPLEMENTED BY CHILD CLASSES
-    protected abstract ActivityComponent init();
+    protected abstract void init();
+    protected abstract void destroy();
     protected abstract void loadData();
     protected abstract <D extends BaseData> void onDataArrived(D data);
 
